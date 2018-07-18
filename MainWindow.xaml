@@ -1,0 +1,74 @@
+﻿<Window x:Class="SweetHome.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Background="{DynamicResource MaterialDesignPaper}"
+        TextElement.FontWeight="Medium"
+        TextElement.FontSize="14"
+        FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
+        xmlns:local="clr-namespace:SweetHome"
+        mc:Ignorable="d" 
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:materialDesignConverters="clr-namespace:MaterialDesignThemes.Wpf.Converters;assembly=MaterialDesignThemes.Wpf"
+            Title="SweetHome"
+             d:DesignHeight="300" d:DesignWidth="450">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <materialDesignConverters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" TrueValue="Visible" FalseValue="Hidden" />
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="5*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Grid.Row="0">
+            <Button Width="40" Height="40" Margin="10" Style="{StaticResource MaterialDesignFloatingActionButton}" 
+                    Command="{Binding ScrapCommand}" ToolTip="Scrap content related to your search query">
+                <materialDesign:PackIcon Kind="Magnify" Height="24" Width="24">
+                </materialDesign:PackIcon>
+            </Button>
+            <ProgressBar Width="24" Style="{StaticResource MaterialDesignCircularProgressBar}"                     
+                     Value="0" Visibility="{Binding Busy, Converter={StaticResource BooleanToVisibilityConverter}}"
+                     IsIndeterminate="True"
+                      VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10"/>
+        </StackPanel>
+
+        <DataGrid Grid.Row="1" ItemsSource="{Binding Apartments}" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button  Command="{Binding Path=DataContext.OpenCommand,       
+ RelativeSource= {RelativeSource FindAncestor,
+  AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding Link}">
+                                <materialDesign:PackIcon Kind="Magnify" Height="24" Width="24">
+                                </materialDesign:PackIcon>
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Done" Command="{Binding Path=DataContext.ValidateCommand,       
+ RelativeSource= {RelativeSource FindAncestor,
+  AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding Link}"></Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                
+                <DataGridTextColumn Header="Prix" Binding="{Binding Price}"/>
+            <DataGridTextColumn Header="Surface" Binding="{Binding Area}"/>
+            <DataGridTextColumn Header="Pieces" Binding="{Binding Rooms}"/>
+            <DataGridTextColumn Header="Lien" Binding="{Binding Link}"/>
+            
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>
